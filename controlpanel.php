@@ -11,4 +11,6 @@ echo "<a class='btn btn-primary btn-xs'
 href='cartmanagement.php' style='margin-right: 5px'>Carts management</a>";
 echo "<a class='btn btn-primary btn-xs'
 href='sendmessages.php' style='margin-right: 5px'>Send messages</a>";
+echo "<a class='btn btn-primary btn-xs'
+href='dashboard.php' style='margin-right: 5px'>Dashboard</a>";
  ?>

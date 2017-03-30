@@ -61,7 +61,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav">
                     <li><a href="cart.php">Cart <?php if(isset($_SESSION['cartadd']) && !empty($_SESSION['cartadd'])) {echo "<i class='glyphicon glyphicon-exclamation-sign'></i>";}?></a></li>
-                    <li><a href="contact.php">Contact</a></li>
+                    <li><a href="contact.php">Contact</a></li>                    
                   </ul>
                   <form class="navbar-form navbar-left" method="GET" action="index.php">
                     <div class="form-group">
