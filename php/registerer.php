@@ -11,10 +11,10 @@ if (isset($_POST['username'])) {
       if ($result = $connection->query($sql)) {
         if ($result->num_rows==0) {
           $sql="INSERT INTO `users` (`id`, `nick`, `email`, `password`,
-             `address`, `type`, `name`, `surname`) VALUES
-             (NULL,'".$_POST["username"]."' , '".$_POST["email"]."' ,
-             md5('".$_POST["password"]."'), '".$_POST["address"]."' , 'user',
-             '".$_POST["name"]."' , '".$_POST["surname"]."' );";
+               `address`, `type`, `name`, `surname`, `theme`) VALUES
+               (NULL,'".$_POST["username"]."' , '".$_POST["email"]."' ,
+               md5('".$_POST["password"]."'), '".$_POST["address"]."' , 'user',
+               '".$_POST["name"]."' , '".$_POST["surname"]."', 'index.css' );";
              if ($result = $connection->query($sql)) {
                if ($result==true) {
                  session_start();

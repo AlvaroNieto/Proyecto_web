@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="" style="height:100%;">
+<html lang="en" style="height:100%;">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
+
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="js/bootstrap.js">
     <?php
@@ -15,8 +16,10 @@
     include_once("php/styleloader.php");
     ?>"
     >
+    <script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
     <!--Load the AJAX API-->
-   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript" src="js/loader.js"></script>
+   <script type="text/javascript" src="js/xepOnline.jqPlugin.js"></script>
    <script type="text/javascript">
    <?php
 
@@ -36,13 +39,20 @@
 
      // Set a callback to run when the Google Visualization API is loaded.
      google.charts.setOnLoadCallback(drawChart);
+     var svg;
+     var svg2 = '#chart_div';
+     function AddNamespaceHandler(){
+        svg = jQuery(svg2+' svg');
+        svg.attr("xmlns", "http://www.w3.org/2000/svg");
+        svg.css('overflow','visible');
+    }
 
      // Callback that creates and populates a data table,
      // instantiates the pie chart, passes in the data and
      // draws it.
+
      function drawChart() {
 
-       // Create the data table.
        var data1 = new google.visualization.DataTable();
        data1.addColumn('string', 'Type');
        data1.addColumn('number', 'Amount');
@@ -57,14 +67,14 @@
           ?>
        ]);
 
-       // Set chart options
        var options = {'title':'Types of cars',
                       'width':400,
                       'height':300};
 
-       // Instantiate and draw our chart, passing in some options.
        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+       google.visualization.events.addListener(chart, 'ready', AddNamespaceHandler);
        chart.draw(data1, options);
+       svg2 = '#chart_div1';
 
        //graph 2
        <?php
@@ -112,8 +122,9 @@
        };
 
        var chart = new google.visualization.ColumnChart(document.getElementById("chart_div1"));
+       google.visualization.events.addListener(chart, 'ready',  AddNamespaceHandler);
        chart.draw(view, options);
-
+       svg2 = '#chart_div2';
        //graph 3
        <?php
        $sql= "SELECT `item.reference` as referencia, sum(quantity) as value FROM `quantity` group by referencia";
@@ -147,10 +158,11 @@
                        'width':400,
                        'height':300};
 
-        // Instantiate and draw our chart, passing in some options.
 
         var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+        google.visualization.events.addListener(chart, 'ready',  AddNamespaceHandler);
         chart.draw(data, options);
+        svg2 = '#chart_div3';
         <?php
         //graph 4
         $sql = "SELECT count(*) as total FROM users where type = 'user'";
@@ -171,14 +183,15 @@
          ['Admins', <?php echo "$admins"?>],
        ]);
 
-       // Set chart options
        var options = {'title':'Admins and users',
                       'width':400,
                       'height':300};
 
-       // Instantiate and draw our chart, passing in some options.
        var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
+       google.visualization.events.addListener(chart, 'ready',  AddNamespaceHandler);
        chart.draw(data, options);
+
+       var click="return xepOnline.Formatter.Format('JSFiddle', {render:'download', srctype:'svg'})";
      }
    </script>
     </head>
@@ -261,17 +274,24 @@
 
           </div>
           <div class="col-md-12" id="content" style="height:100%; overflow:auto;">
-            <div class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
-              <div id="chart_div"></div>
+            <div id="buttons">
+
             </div>
-            <div class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
+            <div id="chart1" class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
+                <div id="chart_div"></div>
+              <button class='btn btn-primary btn-xs' onclick="return xepOnline.Formatter.Format('chart1', {render:'download', srctype:'svg'})">To pdf</button>
+            </div>
+            <div id="chart2" class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
               <div id="chart_div1"></div>
+              <button class='btn btn-primary btn-xs' onclick="return xepOnline.Formatter.Format('chart2', {render:'download', srctype:'svg'})">To pdf</button>
             </div>
-            <div class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
+            <div id="chart3" class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
               <div id="chart_div2"></div>
+              <button class='btn btn-primary btn-xs' onclick="return xepOnline.Formatter.Format('chart3', {render:'download', srctype:'svg'})">To pdf</button>
             </div>
-            <div class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
+            <div id="chart4" class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 15px;">
               <div id="chart_div3"></div>
+              <button class='btn btn-primary btn-xs' onclick="return xepOnline.Formatter.Format('chart4', {render:'download', srctype:'svg'})">To pdf</button>
             </div>
           </div>
           <!-- footer -->
@@ -295,11 +315,6 @@
           <!-- end of footer -->
           </div>
         </div>
-        <?php
-         ?>
-         <script src="https://code.jquery.com/jquery-3.1.1.js"
-            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
-            crossorigin="anonymous"></script>
          <script type="text/javascript" src="js/bootstrap.min.js">
          </script>
          <script type="text/javascript" src="js/check.js">

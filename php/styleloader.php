@@ -8,7 +8,11 @@ if (isset($_POST['estilo'])){
   $sql="SELECT theme FROM users where `id` = '".$_SESSION['id']."'";
   $result = $connection->query($sql);
   $obj = $result->fetch_object();
+  if ($obj->theme == '') {
+    echo "index.css";
+  } else {
   echo "$obj->theme";
+}
 } else if ($_SESSION['type'] == 'none') {
   echo "index.css";
 }
