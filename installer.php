@@ -38,7 +38,7 @@ $sql="INSERT INTO `users` (`id`, `nick`, `email`, `password`,
    NULL , NULL, 'index.css' );";
 
  $result = $connection->query($sql);
- $sql=" UPDATE `users` SET `password` = MD5('12345') WHERE `users`.`id` = 1;";
+ $sql=" UPDATE `users` SET `password` = MD5('".$_POST["apppass"]."') WHERE `users`.`id` = 1;";
  $result = $connection->query($sql);
 
 
