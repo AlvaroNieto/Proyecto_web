@@ -148,6 +148,8 @@
               <div class="panel-heading">
                   <h3 class="panel-title">Products</h3>
                   <div class="pull-right">
+                  <a class="btn btn-info btn-xs"
+                 href="php/pdf.php?toprint=products">Print products to PDF</a>
                       <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</button>
                   </div>
               </div>

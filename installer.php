@@ -1,5 +1,5 @@
 <?php
-//connection.php
+echo "Instalando...";
 function replace_string_in_file($filename, $string_to_replace, $replace_with){
     $content=file_get_contents($filename);
     $content_chunks=explode($string_to_replace, $content);
@@ -28,7 +28,206 @@ function replace_string_in_file($filename, $string_to_replace, $replace_with){
   $replace_with=$_POST['dbname'];
   replace_string_in_file($filename, $string_to_replace, $replace_with);
 
+  if (isset($_POST['dbcreate'])) {
+    $db = $_POST['dbname'];
+    $conexion = new mysqli( $_POST['dburl'], $_POST['dbuser'], $_POST['dbpass']);
+    $sql="CREATE DATABASE $db;";
+    if (!$conexion) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    if (mysqli_query($conexion, $sql)) {
+        echo "Database created successfully";
+    } else {
+        echo "Error creating database: " . mysqli_error($conexion);
+    }
+    unset($conexion);
+  }
+
   include_once("php/connection.php");
+
+  //create tables
+ $sql="CREATE TABLE `cart` (
+   `oid` int(8) NOT NULL,
+   `value` int(7) NOT NULL DEFAULT '0',
+   `date` date NOT NULL,
+   `users.id` int(8) NOT NULL
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="CREATE TABLE `item` (
+   `reference` int(8) NOT NULL,
+   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `value` int(8) NOT NULL,
+   `chassis` varchar(250) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `traction` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `transmission` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `type` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `description` varchar(375) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `description_long` varchar(3000) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `stock` int(8) NOT NULL,
+   `pic` varchar(250) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="CREATE TABLE `messages` (
+   `mid` int(8) NOT NULL,
+   `users.id` int(8) NOT NULL,
+   `message` varchar(250) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="CREATE TABLE `quantity` (
+   `item.reference` int(8) NOT NULL,
+   `cart.oid` int(8) NOT NULL,
+   `quantity` int(8) NOT NULL
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="CREATE TABLE `users` (
+   `id` int(7) NOT NULL,
+   `nick` varchar(20) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+   `address` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+   `type` enum('admin','user') CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL DEFAULT 'user',
+   `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+   `surname` varchar(60) CHARACTER SET utf8 COLLATE utf8_spanish_ci DEFAULT NULL,
+   `theme` enum('index.css','index0.css','index1.css') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'index.css'
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="INSERT INTO `users` (`id`, `nick`, `email`, `password`, `address`, `type`, `name`, `surname`, `theme`) VALUES
+ (14, 'all', 'all@all.com', '827ccb0eea8a706c4c34a16891f84e7b', 'all', 'user', 'all', 'all', 'index.css');";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+//FOREIGN keys, primary keys, autoincrements
+ $sql="ALTER TABLE `cart`
+   ADD PRIMARY KEY (`oid`,`users.id`),
+   ADD KEY `users.id` (`users.id`);";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `item`
+   ADD PRIMARY KEY (`reference`),
+   ADD KEY `subcategory_name` (`chassis`);";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `messages`
+   ADD PRIMARY KEY (`mid`,`users.id`),
+   ADD KEY `users.id` (`users.id`);";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `quantity`
+   ADD PRIMARY KEY (`item.reference`,`cart.oid`),
+   ADD KEY `cart.oid` (`cart.oid`);";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `users`
+   ADD PRIMARY KEY (`id`),
+   ADD UNIQUE KEY `nick` (`nick`),
+   ADD UNIQUE KEY `email` (`email`);";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `cart`
+   MODIFY `oid` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `item`
+   MODIFY `reference` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `messages`
+   MODIFY `mid` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `users`
+   MODIFY `id` int(7) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `cart`
+   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`users.id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `quantity`
+   ADD CONSTRAINT `quantity_ibfk_1` FOREIGN KEY (`cart.oid`) REFERENCES `cart` (`oid`) ON DELETE CASCADE ON UPDATE CASCADE,
+   ADD CONSTRAINT `r.item` FOREIGN KEY (`item.reference`) REFERENCES `item` (`reference`) ON DELETE CASCADE ON UPDATE CASCADE;";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
+
+ $sql="ALTER TABLE `messages`
+   ADD CONSTRAINT `messa_ibfk_1` FOREIGN KEY (`users.id`) REFERENCES `users` (`id`) ON UPDATE CASCADE;
+";
+ $result = $connection->query($sql);
+ if (!$result) {
+   echo "Query error";
+   var_dump($sql);
+ }
 
 //admin user
 

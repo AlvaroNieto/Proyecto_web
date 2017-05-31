@@ -5,4 +5,5 @@ if ($connection->connect_errno) {
     exit();
 }
 $acentos = $connection->query("SET NAMES 'utf8'");
+
  ?>

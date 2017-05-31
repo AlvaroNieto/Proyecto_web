@@ -18,6 +18,9 @@
             <legend style="margin-top: 20px;">
               Instalador
             </legend>
+            <input type="checkbox" name="dbcreate" id="dbcreate" /><label for="dbcreate"> Crear base de datos</label><br />
+            <span>Si ya se tiene la base de datos creada, no seleccione la opción de arriba.</span><br />
+            <span>Si existe, tiene que estar vacia.</span><br />
             <label for="dbname">Escriba el nombre para la base de datos</label><br />
             <input type="text" name="dbname" id="dbname" required/><br />
             <label for="dburl">Escriba el enlace para la base de datos</label><br />
@@ -35,7 +38,6 @@
             <input type="checkbox" name="usuarios" id="usuarios" /><label for="usuarios">Usuarios de prueba</label><br />
             <br />
             <button>Guardar</button>
-            <span>Todos los campos son obligatorios menos los elementos a cargar.</span>
           </form>
         </div>
       </div>
